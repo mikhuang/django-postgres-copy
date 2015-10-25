@@ -48,7 +48,7 @@ class CopyMapping(object):
             except KeyError:
                 raise ValueError("Map does not include %s field" % h)
             try:
-                f = [f for f in self.model._meta.fields if f.name == f_name][0]
+                f = [f for f in self.model._meta.fields if f.name == f_name or f.attname == f_name][0]
             except IndexError:
                 raise ValueError("Model does not include %s field" % f_name)
             self.field_header_crosswalk.append((f, h))
@@ -193,7 +193,7 @@ class CopyMapping(object):
             if field.db_column:
                 model_fields.append('"%s"' % field.db_column)
             else:
-                model_fields.append('"%s"' % field.name)
+                model_fields.append('"%s"' % field.attname)
         options['model_fields'] = ", ".join(model_fields)
 
         temp_fields = []
